@@ -196,4 +196,4 @@ Dev dependencies include `typescript`, `vite`, `eslint`, `prettier`, `vitest`, `
 
 ## License
 
-MIT License. See [LICENSE](./LICENSE).
+MIT License. See [LICENSE](./LICENSE)
