@@ -12,12 +12,20 @@ function LoginPage() {
 
   const handleForm = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(undefined);
 
     try {
       await api.post("/login", form);
       navigate("/");
     } catch (err: any) {
-      setError(err.response?.data);
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.data ||
+        err.message ||
+        "Login failed";
+      setError(
+        typeof errorMessage === "string" ? errorMessage : String(errorMessage)
+      );
     }
   };
 

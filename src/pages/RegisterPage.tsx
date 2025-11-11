@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../utils/axiosConfig";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const [form, setForm] = useState({
@@ -9,12 +10,14 @@ function RegisterPage() {
     repeatedPassword: "",
   });
   const [error, setError] = useState<string>();
+  const navigate = useNavigate();
 
   const handleForm = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       await api.post("/register", form);
+      navigate("/login");
     } catch (err: any) {
       setError(err.response?.data);
     }
