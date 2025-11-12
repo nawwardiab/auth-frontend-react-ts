@@ -43,7 +43,7 @@ export const signup = async (
 // fetch current logged in user
 export const getProfile = async (): Promise<User> => {
   try {
-    const res: AxiosResponse<{ user: User }> = await api.get("/api/profile");
+    const res: AxiosResponse<{ user: User }> = await api.get("/v1/profile");
     return res.data.user;
   } catch (err: unknown) {
     console.error("Fetch profile error:", err);

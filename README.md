@@ -1,6 +1,4 @@
-# README.md
-
-## Auth-Frontend (React + TypeScript)
+# Auth-Frontend (React + TypeScript)
 
 Frontend client for the **Auth-Service Backend API**. Provides a simple UI for user **registration, login, and home navigation**, integrated with backend authentication and address management endpoints. Built with **React, TypeScript, Vite, React Router, Axios, Tailwind, and shadcn/ui**.
 
