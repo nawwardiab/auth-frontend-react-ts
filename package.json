@@ -48,5 +48,17 @@
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4",
     "vitest": "^3.2.4"
-  }
+  },
+  "description": "## Auth-Frontend (React + TypeScript)",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nawwardiab/auth-frontend-react-ts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nawwardiab/auth-frontend-react-ts/issues"
+  },
+  "homepage": "https://github.com/nawwardiab/auth-frontend-react-ts#readme"
 }
