@@ -48,6 +48,9 @@ function LoginPage() {
         onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
       />
       <button type="submit">Login</button>
+      <button type="button" onClick={() => navigate("/register")}>
+        Need an account? Register
+      </button>
     </form>
   );
 }
