@@ -1,100 +1,124 @@
 # Auth-Frontend (React + TypeScript)
 
-Frontend client for the **Auth-Service Backend API**. Provides a simple UI for user **registration, login, and home navigation**, integrated with backend authentication and address management endpoints. Built with **React, TypeScript, Vite, React Router, Axios, Tailwind, and shadcn/ui**.
+## Live Demo
+🌐 **Frontend App**: https://auth-frontend-react-ts.vercel.app
+🚀 **Backend API**: https://auth-service-backend-go-production.up.railway.app
 
----
-
-## Deployed 15.12.2025
+Modern React frontend for the Auth-Service Backend API with production deployment on Vercel.
 
 ---
 
 ## Features
 
-* **Authentication**
+- **User Registration & Login** - Complete authentication flow with form validation
+- **JWT Authentication** - Secure token-based auth via HTTP-only cookies
+- **CSRF Handling** - Automatic CSRF token management for protected requests
+- **Address Management CRUD** - Full create, read, update, delete operations for user addresses
+- **Responsive Design** - Mobile-first UI built with TailwindCSS and shadcn/ui
+- **Protected Routes** - React Router guards for authenticated pages
+- **Form Validation** - Client-side validation using react-hook-form + zod
+- **Axios Interceptors** - Automatic error handling and request/response transformation
 
-  * Register new users
-  * Login with credentials → handled via backend-issued HttpOnly JWT cookie
-  * Logout (API call clears JWT cookie)
-* **Protected Home Page** (visible to logged-in users)
+---
 
-  * Navigation links: Logout, Products, Account, Cart
-* **Forms**
+## Tech Stack
 
-  * Built with `react-hook-form` + `zod` validation
-* **Networking**
+- **React 18** - Modern React with hooks and concurrent features
+- **TypeScript** - Type-safe development
+- **Vite** - Lightning-fast build tool and dev server
+- **Axios** - HTTP client with interceptors for auth and CSRF
+- **React Router v6** - Client-side routing with protected routes
+- **TailwindCSS + shadcn/ui** - Modern component library and styling
+- **react-hook-form + zod** - Form management with schema validation
+- **Vercel** - Cloud platform for frontend deployment
 
-  * API requests with `axios` (configured in `src/utils/axiosConfig.ts`)
-* **Routing**
+---
 
-  * `react-router-dom` for pages & navigation
-* **UI/Styling**
+## Security
 
-  * TailwindCSS + shadcn/ui + lucide-react icons
-* **Internationalization**
-
-  * `i18next` + `react-i18next` setup for translations
-* **Charts & Dates** (future extension)
-
-  * `chart.js` + `react-chartjs-2`
-  * `date-fns`
+- **HTTP-Only Cookies** - JWT tokens stored securely, inaccessible to JavaScript
+- **CSRF Token Validation** - Automatic token extraction and header injection for protected requests
+- **Secure Cross-Site Cookies** - SameSite=None with Secure flag for production
+- **No Token Storage** - No JWT tokens in localStorage or sessionStorage
+- **Axios Interceptors** - Centralized auth error handling with automatic logout on 401
 
 ---
 
 ## Project Structure
 
 ```
-.
-├── eslint.config.js              # ESLint configuration
-├── index.html                    # Root HTML template
-├── LICENSE                       # License file
-├── notes.md                      # Project notes
-├── package.json / package-lock.json
-├── src
-│   ├── api
-│   │   └── authApi.ts            # API calls for auth endpoints
-│   ├── App.tsx                   # Root app component
-│   ├── index.css                 # Global styles
-│   ├── main.tsx                  # React entry point
-│   ├── pages
-│   │   ├── HomePage.tsx
-│   │   ├── LoginPage.tsx
-│   │   └── RegisterPage.tsx
-│   ├── routes
-│   │   └── AppRouter.tsx         # Route definitions
-│   ├── utils
-│   │   └── axiosConfig.ts        # Axios instance with baseURL & cookies
-│   └── vite-env.d.ts             # Vite/TypeScript types
-├── tsconfig*.json                # TypeScript configs
-└── vite.config.ts                # Vite configuration
+src/
+├── api/
+│   └── authApi.ts            # API calls for auth endpoints
+├── pages/
+│   ├── HomePage.tsx          # Protected home page
+│   ├── LoginPage.tsx         # Login form
+│   └── RegisterPage.tsx      # Registration form
+├── routes/
+│   └── AppRouter.tsx         # Route definitions with protection
+├── utils/
+│   └── axiosConfig.ts        # Axios instance with baseURL & interceptors
+├── App.tsx                   # Root app component
+├── main.tsx                  # React entry point
+└── index.css                 # Global styles
 ```
 
 ---
 
-## Requirements
+## Deployment
 
-* Node.js 20+
-* npm 9+
+**Platform**: Vercel
+**Deployment Date**: December 15, 2025
+**Features**:
+- Automatic HTTPS via Vercel edge network
+- Auto-deploy on git push to main branch
+- Environment variables configured via Vercel dashboard
+- `VITE_API_BASE_URL` points to Railway backend
+- Zero-config deployment with Vite
+
+**Production URL**: https://auth-frontend-react-ts.vercel.app
 
 ---
 
-## Setup
+## Local Development
 
-### 1. Clone repo
+All commands assume you are in the `frontend/` directory.
+
+### Requirements
+
+- Node.js 20+
+- npm 9+
+
+### Setup
+
+#### 1. Clone repo
 
 ```bash
 git clone https://github.com/nawwardiab/auth-frontend-react-ts.git
 cd auth-frontend-react-ts
 ```
 
-### 2. Install dependencies
+#### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Configure API base URL
+#### 3. Configure API base URL
 
-Update `src/utils/axiosConfig.ts` if backend is not running on default:
+Create `.env` file:
+
+```env
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+For production, update to point to your deployed backend:
+
+```env
+VITE_API_BASE_URL=https://auth-service-backend-go-production.up.railway.app/api
+```
+
+The axios instance in `src/utils/axiosConfig.ts` uses this environment variable:
 
 ```ts
 const api = axios.create({
@@ -103,13 +127,7 @@ const api = axios.create({
 });
 ```
 
-Create `.env` file if needed:
-
-```env
-VITE_API_BASE_URL=http://localhost:8080/api
-```
-
-### 4. Run development server
+#### 4. Run development server
 
 ```bash
 npm run dev
@@ -117,7 +135,7 @@ npm run dev
 
 Frontend available at: `http://localhost:5173`
 
-### 5. Build for production
+#### 5. Build for production
 
 ```bash
 npm run build
@@ -125,7 +143,7 @@ npm run build
 
 Output in `/dist`.
 
-### 6. Preview production build
+#### 6. Preview production build
 
 ```bash
 npm run preview
@@ -135,10 +153,10 @@ npm run preview
 
 ## Available Scripts
 
-* `npm run dev` → Start dev server
-* `npm run build` → Build production bundle
-* `npm run preview` → Preview production build
-* `npm run lint` → Run ESLint checks
+- `npm run dev` - Start dev server with hot reload
+- `npm run build` - Build production bundle
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint checks
 
 ---
 
@@ -146,36 +164,23 @@ npm run preview
 
 This frontend integrates with the **Auth-Service Backend API**:
 
-* **Register** → `POST /register`
-* **Login** → `POST /login` (sets HttpOnly JWT cookie)
-* **Logout** → `POST /api/v1/logout` (clears cookie)
-* **Addresses** → `POST/GET/PATCH/DELETE /api/v1/users/address/...`
+### Public Endpoints
+- **Register** - `POST /api/register` (creates new user)
+- **Login** - `POST /api/login` (sets HttpOnly JWT cookie)
 
-Authentication state relies on:
+### Protected Endpoints (require JWT + CSRF token)
+- **Logout** - `POST /api/v1/logout` (clears cookie)
+- **Profile** - `GET /api/v1/profile` (gets current user)
+- **Addresses** - `POST/GET/PATCH/DELETE /api/v1/users/address/...`
 
-* **HttpOnly JWT cookie** (set by backend on login)
-* **CSRF token** for protected requests
+### Authentication Flow
+
+1. User logs in → Backend sets HTTP-only JWT cookie
+2. Frontend makes protected request → Axios automatically includes cookie
+3. Backend validates JWT + CSRF token → Returns response
+4. On 401 error → Axios interceptor redirects to login
 
 Frontend does not store tokens in `localStorage`/`sessionStorage` for security.
-
----
-
-## Deployment
-
-### Local only (default)
-
-Use Vite dev/preview as above.
-
-### With Docker (optional)
-
-Add a `Dockerfile` for consistent frontend deployment, or serve `/dist` with Nginx:
-
-```bash
-npm run build
-npx serve -s dist
-```
-
-Recommended for staging/production when backend is also containerized.
 
 ---
 
@@ -183,14 +188,15 @@ Recommended for staging/production when backend is also containerized.
 
 Key runtime dependencies:
 
-* `react`, `react-dom`
-* `react-router-dom`
-* `axios`
-* `react-hook-form`, `zod`
-* `tailwindcss`, `@shadcn/ui`, `lucide-react`
-* `i18next`, `react-i18next`
-* `chart.js`, `react-chartjs-2`
-* `date-fns`
+- `react`, `react-dom` - React framework
+- `react-router-dom` - Client-side routing
+- `axios` - HTTP client with interceptors
+- `react-hook-form`, `zod` - Form handling and validation
+- `tailwindcss`, `@shadcn/ui` - Styling and UI components
+- `lucide-react` - Icon library
+- `i18next`, `react-i18next` - Internationalization (future-ready)
+- `chart.js`, `react-chartjs-2` - Charts (future extension)
+- `date-fns` - Date formatting
 
 Dev dependencies include `typescript`, `vite`, `eslint`, `prettier`, `vitest`, `husky`, `lint-staged`.
 
@@ -199,3 +205,7 @@ Dev dependencies include `typescript`, `vite`, `eslint`, `prettier`, `vitest`, `
 ## License
 
 MIT License. See [LICENSE](./LICENSE)
+
+---
+
+**Built by Nawar Diab** | [GitHub](https://github.com/nawwardiab) | [LinkedIn](https://www.linkedin.com/in/nawar-diab)
