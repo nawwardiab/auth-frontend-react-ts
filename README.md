@@ -4,6 +4,10 @@ Frontend client for the **Auth-Service Backend API**. Provides a simple UI for u
 
 ---
 
+## Deployed 15.12.2025
+
+---
+
 ## Features
 
 * **Authentication**
