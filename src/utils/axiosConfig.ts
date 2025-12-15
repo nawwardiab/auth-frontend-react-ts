@@ -41,7 +41,7 @@ api.interceptors.response.use(
  */
 api.interceptors.request.use((config) => {
   // Only add CSRF token for protected routes (starting with /v1/)
-  const isProtectedRoute = config.url?.startsWith("/v1/");
+  const isProtectedRoute = config.url?.includes("/v1/");
 
   if (!isProtectedRoute) {
     // Public routes like /login and /register don't need CSRF
