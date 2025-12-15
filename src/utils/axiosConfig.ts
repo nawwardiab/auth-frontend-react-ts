@@ -5,15 +5,20 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Store CSRF token in memory (fallback if cookie reading fails due to path restrictions)
+// Store CSRF tokens in memory
 let csrfTokenCache: string | null = null;
+let csrfTokenFromResponse: string | null = null; // ← NEW: Store token from response body
 
 /*
- * Intercepts responses to capture CSRF token from Set-Cookie header
- * This works even if the cookie has a specific path that prevents document.cookie access
+ * Intercepts responses to capture CSRF token from response body and Set-Cookie header
  */
 api.interceptors.response.use(
   (response) => {
+    // NEW: Capture CSRF token from response body (login/register)
+    if (response.data?.csrfToken) {
+      csrfTokenFromResponse = response.data.csrfToken;
+    }
+    
     // Extract CSRF token from Set-Cookie header if present
     const setCookieHeader = response.headers["set-cookie"];
     if (setCookieHeader) {
@@ -36,30 +41,35 @@ api.interceptors.response.use(
 );
 
 /*
- * Intercepts requests to add CSRF token from cookie or cache
- * Backend requires X-CSRF-Token header for protected routes (those starting with /v1/)
+ * Intercepts requests to add CSRF token header for protected routes
  */
 api.interceptors.request.use((config) => {
-  // Only add CSRF token for protected routes (starting with /v1/)
+  // Only add CSRF token for protected routes (containing /v1/)
   const isProtectedRoute = config.url?.includes("/v1/");
-
   if (!isProtectedRoute) {
     // Public routes like /login and /register don't need CSRF
     return config;
   }
 
   let csrfToken: string | undefined;
-
-  // First, try to read from document.cookie
-  const cookies = document.cookie.split("; ");
-  for (const cookie of cookies) {
-    if (cookie.trim().startsWith("csrf_token=")) {
-      csrfToken = cookie.split("=")[1];
-      break;
+  
+  // Priority 1: Use token from response body (most reliable for cross-site)
+  if (csrfTokenFromResponse) {
+    csrfToken = csrfTokenFromResponse;
+  }
+  
+  // Priority 2: Try to read from document.cookie
+  if (!csrfToken) {
+    const cookies = document.cookie.split("; ");
+    for (const cookie of cookies) {
+      if (cookie.trim().startsWith("csrf_token=")) {
+        csrfToken = cookie.split("=")[1];
+        break;
+      }
     }
   }
-
-  // Fallback to cached token if cookie reading failed (due to path restrictions)
+  
+  // Priority 3: Fallback to cached token from Set-Cookie header
   if (!csrfToken && csrfTokenCache) {
     csrfToken = csrfTokenCache;
   }
@@ -67,8 +77,6 @@ api.interceptors.request.use((config) => {
   if (csrfToken) {
     config.headers["X-CSRF-Token"] = csrfToken;
   }
-  // Note: CSRF token will be set by backend on first GET request
-  // Missing token on first request is expected and will be handled by backend
 
   return config;
 });
